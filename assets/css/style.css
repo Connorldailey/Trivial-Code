@@ -5,6 +5,7 @@
 :root {
     --main-background: #cc0000;
     --card-background: lightgray;
+    --hover-background: gray;
 }
 
 body {
@@ -72,6 +73,11 @@ footer {
     align-items: center;
     justify-content: center;
     margin-right: 1.5rem;
+}
+
+#gameplay-section:hover {
+    background-color: var(--hover-background);
+
 }
 
 #instructions-section {
