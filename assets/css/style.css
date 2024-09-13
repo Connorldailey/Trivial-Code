@@ -87,6 +87,17 @@ footer {
 
 #stats-section {
     margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+#stats-table {
+    border: 1px solid black;
+}
+
+#stats-table th, td {
+    padding: 1rem;
+    border: 1px solid black;
 }
 
 @media screen and (max-width: 768px) {
