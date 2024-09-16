@@ -91,13 +91,10 @@ footer {
     align-items: center;
 }
 
-#stats-table {
-    border: 1px solid black;
-}
-
 #stats-table th, td {
     padding: 1rem;
     border: 1px solid black;
+    text-align: center;
 }
 
 @media screen and (max-width: 768px) {
