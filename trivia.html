@@ -51,13 +51,27 @@
                             <input type="radio" id="questionD-input" name="question">
                             <label for="questionD-input" id="questionD-label"></label>
                         </div>
+                        <input type="submit" value="Submit">
                     </form>
                 </div>
                 <div id="shortanswer-module" >
                     <form id="shortanswer-form">
+                       <input type="text" name="shortanswer-textbox" id="shortanswer-input"> 
+                       <input type="submit" value="Submit">
+                    </form>
                 </div>
-                    <div id="endgame-module">
-
+                <div id="endgame-module">
+                    <h2>Good Game!!</h2>
+                    <ul>
+                        <li>Username: <span id="player"></span></li>
+                        <li>Score: <span id="score"></span></li>
+                        <li>Average Time: <span id="avgtime"></span></li>
+                        <li>Date: <span id="date"></span></li>
+                    </ul>
+                    <div>
+                        <button id="replay-button">Play Again?</button>
+                        <button id="exit-button">See Leaderboard</button>
+                    </div>
                 </div>
             </section>  
         </main>
