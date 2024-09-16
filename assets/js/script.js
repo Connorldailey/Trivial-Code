@@ -83,3 +83,4 @@ const renderStatsTable = function(statsObject) {
     statsTableEl.setAttribute('style', 'border: 1px solid black;');
 }
 
+/////Start of Trivia Page JavaScript/////
