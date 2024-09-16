@@ -14,24 +14,52 @@
         </header>
         <!-- Add the main section to hold the page content -->
         <main>
-          <section class="page-section" id="trivia-section"> 
-          <!--User Name--> 
-            <div id="username-module">
+            <section class="page-section" id="trivia-section"> 
+            <!--User Name--> 
+                <div id="username-module">
+                    <h2>Enter Username</h2>
+                    <form id="username-form">
+                        <input type="text" id="username" name="username">
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+                <div id="countdown-module"> 
+                    <p id="countdown-timer"></p>  
+                </div>
+                <div id="prompt-header">
+                    <h2 id="prompt"></h2>
+                    <div>  
+                        <p id="streak"></p>
+                        <p id="timer"></p>
+                    </div>   
+                </div>
+                <div id="multiplechoice-module">
+                    <form id="multiplechoice-form">
+                        <div id="questionA-div">
+                            <input type="radio" id="questionA-input" name="question">
+                            <label for="questionA-input" id="questionA-label"></label>
+                        </div>
+                        <div id="questionB-div">
+                            <input type="radio" id="questionB-input" name="question">
+                            <label for="questionB-input" id="questionB-label"></label>
+                        </div>
+                        <div id="questionC-div">
+                            <input type="radio" id="questionC-input" name="question">
+                            <label for="questionC-label"></label>
+                        </div>
+                        <div id="questionD-div">
+                            <input type="radio" id="questionD-input" name="question">
+                            <label for="questionD-input" id="questionD-label"></label>
+                        </div>
+                    </form>
+                </div>
+                <div id="shortanswer-module" >
+                    <form id="shortanswer-form">
+                </div>
+                    <div id="endgame-module">
 
-           </div>
-           <div id="countdown-module"> 
-
-           </div>
-           <div id="listanswer-module">
-
-           </div>
-           <div id="shortanswer-module" >
-
-           </div>
-           <div id="endgame-module">
-
-           </div>
-        </section>  
+                </div>
+            </section>  
         </main>
         <!-- Add the page footer -->
         <footer>
