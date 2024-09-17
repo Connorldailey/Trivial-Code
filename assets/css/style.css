@@ -9,12 +9,12 @@
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     line-height: 1.5;
-    display: flex;
-    flex-direction: column;
 }
 
 h1 {
@@ -28,6 +28,8 @@ h2 {
 main {
     flex: 1 0 auto;
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -58,11 +60,11 @@ footer {
     flex-direction: column;
     border: 3px solid black;
     border-radius: 10px;
-    padding: 1rem;
+    padding: 1.5rem;
     background-color: var(--card-background);
 }
 
-.page-section ul {
+#instructions-section ul {
     list-style: circle;
     padding-left: 25px;
 }
@@ -77,7 +79,6 @@ footer {
 
 #gameplay-section:hover {
     background-color: var(--hover-background);
-
 }
 
 #instructions-section {
@@ -95,6 +96,79 @@ footer {
     padding: 1rem;
     border: 1px solid black;
     text-align: center;
+}
+
+#trivia-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#username-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#countdown-timer {
+    font-size: 300%;
+    align-self: center;
+}
+
+#prompt-header {
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#prompt-header > div {
+    display: flex;
+    justify-content: end;
+}
+
+#streak {
+    font-size: 150%;
+    font-weight: 700;
+    margin-right: 1.5rem;
+}
+
+#timer {
+    width: 3rem;
+    height: 3rem;
+    font-size: 150%;
+    font-weight: 700;
+    border: 3px solid black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#multiplechoice-module {
+    display: none;
+    flex-direction: column;
+}
+
+#shortanswer-module {
+    display: none;
+    flex-direction: column;
+}
+
+#endgame-module {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+#endgame-module ul {
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+#replay-button, #exit-button {
+    width: 100px;
+    margin: 1rem;
 }
 
 @media screen and (max-width: 768px) {
