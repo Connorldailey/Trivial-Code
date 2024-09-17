@@ -94,3 +94,10 @@ const renderStatsTable = function(statsObject) {
     FOR TRIVIA.HTML
     ----------------------------------------------------------------
 */
+let gameplayObject = {
+    username: '',
+    score: 0,
+    numQuestions: 0,
+    totalTime: 0,
+    date: new Date().toJSON().slice(0,10)
+}
