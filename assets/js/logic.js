@@ -5,8 +5,8 @@
 */
 
 // Add an event listener to the gameplay-section
-const startGameButton = document.getElementById("gameplay-section");
-startGameButton.addEventListener("click", function() {
+const startGameButton = document.getElementById('#gameplay-section');
+startGameButton.addEventListener('click', function() {
     window.location.href = "./trivia.html";
 });
 
@@ -89,15 +89,3 @@ const renderStatsTable = function(statsObject) {
     statsTableEl.setAttribute('style', 'border: 1px solid black;');
 }
 
-/* 
-    ----------------------------------------------------------------
-    FOR TRIVIA.HTML
-    ----------------------------------------------------------------
-*/
-let gameplayObject = {
-    username: '',
-    score: 0,
-    numQuestions: 0,
-    totalTime: 0,
-    date: new Date().toJSON().slice(0,10)
-}
