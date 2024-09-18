@@ -14,7 +14,6 @@ let gameplayObject = {
 const usernameFormEl = document.querySelector('#username-form');
 const submitUsernameForm = function(event) {
     event.preventDefault();
-    console.log('hello World')
     const username = usernameFormEl.username.value;
     if (!username || username === "") {
         const errorMessageEl = document.querySelector('#error-message');
@@ -25,6 +24,24 @@ const submitUsernameForm = function(event) {
     usernameModuleEl.setAttribute('style', 'display: none;');
     gameplayObject.username = username;
     startCountdown();
-    console.log(gameplayObject)
+  
 }
 usernameFormEl.addEventListener('submit', submitUsernameForm);
+
+const startCountdown = function() {
+    let timeLeft = 4;
+    const countEl = document.querySelector('#countdown-timer');
+    const timeInterval = setInterval(function() {
+        if (timeLeft > 1) {
+            countEl.textContent = timeLeft - 1;
+            timeLeft--;
+        } else if (timeLeft === 1) {
+            countEl.textContent = 'Go!';
+            timeLeft--;
+        } else {
+            countEl.textContent = '';
+            clearInterval(timeInterval);
+            initializeGame();
+        }
+    }, 1000);
+}
