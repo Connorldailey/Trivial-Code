@@ -2,7 +2,7 @@
 <html lang="US-en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Trivial Code</title>
         <link rel="stylesheet" href="./assets/css/reset.css" />
         <link rel="stylesheet" href="./assets/css/style.css" />
@@ -21,6 +21,7 @@
                     <form id="username-form">
                         <input type="text" id="username" name="username">
                         <input type="submit" value="Submit">
+                        <p id="error-message"></p>
                     </form>
                 </div>
                 <div id="countdown-module"> 
@@ -45,7 +46,7 @@
                         </div>
                         <div id="questionC-div">
                             <input type="radio" id="questionC-input" name="question">
-                            <label for="questionC-label"></label>
+                            <label for="questionC-input" id="questionC-label"></label>
                         </div>
                         <div id="questionD-div">
                             <input type="radio" id="questionD-input" name="question">
@@ -79,5 +80,6 @@
         <footer>
             <h2>Created by the JigsawJSONs</h2>
         </footer>
+        <script src="./assets/js/trivia.js"></script>
     </body>
 </html>
