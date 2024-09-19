@@ -10,9 +10,9 @@ let gameplayObject = {
     score: 0,
     numQuestions: 0,
     totalTime: 0,
-    date: new Date().toJSON().slice(0,10)
+    date: new Date().toJSON().slice(0,10),
 }
- 
+
 // Handle username form submission
 const usernameFormEl = document.querySelector('#username-form');
 const submitUsernameForm = function(event) {
@@ -27,7 +27,6 @@ const submitUsernameForm = function(event) {
     usernameModuleEl.setAttribute('style', 'display: none;');
     gameplayObject.username = username;
     startCountdown();
-  
 }
 usernameFormEl.addEventListener('submit', submitUsernameForm);
 
@@ -52,12 +51,14 @@ const startCountdown = function() {
 
 // Define a global variable for the current question and timer
 let currentQuestion = {};
+let questionsSeen = [];
 let timer;
 
 // Chose a question type and call the respective operations
 const initializeQuestion = function() {
     // Ensure none of the radio buttons are checked
     clearRadioButtons();
+    clearMessages();
     // Randomly select either a multiple choice (0) or short answer (1) question
     const questionType = Math.floor(Math.random() * 2);
     if (questionType === 0) {
@@ -74,8 +75,17 @@ const newMultipleChoice = function() {
     // Increment the number of questions
     gameplayObject.numQuestions++;
     // Select a random question
-    const questionIndex = Math.floor(Math.random() * tempMultipleChoiceQuestions.length);
-    const question = tempMultipleChoiceQuestions[questionIndex];
+    let questionIndex;
+    let question;
+    let questionUsed = true;
+    while(questionUsed) {
+        questionIndex = Math.floor(Math.random() * tempMultipleChoiceQuestions.length);
+        question = tempMultipleChoiceQuestions[questionIndex];
+        if (!questionsSeen.includes(question)) {
+            questionUsed = false;
+            questionsSeen.push(question);
+        }
+    }
     currentQuestion = question;
     // Display the prompt header
     const promptHeaderModule = document.querySelector('#prompt-header');
@@ -85,14 +95,14 @@ const newMultipleChoice = function() {
     // Fill the form with the choices
     const multipleChoiceModule = document.querySelector('#multiplechoice-module');
     multipleChoiceModule.setAttribute('style', 'display: flex;');
-    const questionALabel = document.querySelector('#choice1-label');
-    questionALabel.textContent = currentQuestion.choices[0];
-    const questionBLabel = document.querySelector('#choice2-label');
-    questionBLabel.textContent = currentQuestion.choices[1];
-    const questionCLabel = document.querySelector('#choice3-label');
-    questionCLabel.textContent = currentQuestion.choices[2];
-    const questionDLabel = document.querySelector('#choice4-label');
-    questionDLabel.textContent = currentQuestion.choices[3];
+    const choice1Label = document.querySelector('#choice1-label');
+    choice1Label.textContent = currentQuestion.choices[0];
+    const choice2Label = document.querySelector('#choice2-label');
+    choice2Label.textContent = currentQuestion.choices[1];
+    const choice3Label = document.querySelector('#choice3-label');
+    choice3Label.textContent = currentQuestion.choices[2];
+    const choice4Label = document.querySelector('#choice4-label');
+    choice4Label.textContent = currentQuestion.choices[3];
     // Handle the timer
     let timeLeft = 10;
     const timerEl = document.querySelector('#timer');
@@ -120,10 +130,11 @@ const newMultipleChoice = function() {
 const multipleChoiceFormEl = document.querySelector('#multiplechoice-form');
 const submitMultipleChoiceForm = function(event) {
     event.preventDefault();
-    const correctRadio = `choice${currentQuestion.correctIndex + 1}-input`;
+    const correctRadio = `#choice${currentQuestion.correctIndex + 1}-input`;
     const timerEl = document.querySelector('#timer');
     let correctAnswer = false;
-    if (document.getElementById(correctRadio).checked) {
+    console.log(document.querySelector(correctRadio).checked);
+    if (document.querySelector(correctRadio).checked) {
         gameplayObject.score++;
         clearInterval(timer);
         correctAnswer = true;
@@ -132,7 +143,6 @@ const submitMultipleChoiceForm = function(event) {
         streak.textContent = gameplayObject.score;
         setTimeout(() => {
             timerEl.innerHTML = "";
-            clearMessages();
             initializeQuestion();
         }, 3000);
     } else {
@@ -140,7 +150,6 @@ const submitMultipleChoiceForm = function(event) {
         displayMultipleChoiceResults(correctAnswer);
         setTimeout(() => {
             timerEl.innerHTML = "";
-            clearMessages();
             endGame();
         }, 3000);
     }
@@ -310,7 +319,7 @@ const tempMultipleChoiceQuestions = [
     },
     {
         prompt: "How many continents are there on Earth?",
-        choices: ["5", "6", "7", "8"],
+        choices: ["8", "6", "7", "4"],
         correctIndex: 2
     },
     {
