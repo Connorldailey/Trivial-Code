@@ -1,4 +1,4 @@
-# Trivial-Code
+# Trivial Code
 
 ## Description
 
