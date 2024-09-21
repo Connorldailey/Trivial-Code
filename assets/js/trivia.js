@@ -44,6 +44,10 @@ usernameFormEl.addEventListener('submit', submitUsernameForm);
 
 // Start the game countdown
 const startCountdown = function() {
+    // Center the countdown in the trivia section
+    const triviaSection = document.querySelector('#trivia-section');
+    triviaSection.style.justifyContent = 'center';
+    triviaSection.style.alignItems = 'center';
     // Set the timer to 4 seconds
     let timeLeft = 4;
     // Select the countdown timer element from the DOM
@@ -62,6 +66,11 @@ const startCountdown = function() {
         } else {
             countEl.textContent = '';
             clearInterval(timeInterval);
+            // Reset the Flexbox styles back to default
+            triviaSection.style.justifyContent = '';
+            triviaSection.style.alignItems = '';
+            const streak = document.querySelector('#streak');
+            streak.textContent = 0;
             initializeQuestion();
         }
     }, 1000);
@@ -158,7 +167,6 @@ const submitMultipleChoiceForm = function(event) {
     const correctRadio = `#choice${currentQuestion.correctIndex + 1}-input`;
     const timerEl = document.querySelector('#timer');
     let correctAnswer = false;
-    console.log(document.querySelector(correctRadio).checked);
     if (document.querySelector(correctRadio).checked) {
         gameplayObject.score++;
         clearInterval(timer);
@@ -290,19 +298,24 @@ shortAnswerFormEl.addEventListener('submit', submitShortAnswerForm);
 
 // Display feedback on short answer questions
 const displayShortAnswerResults = function(correctAnswer) {
-    const correctMessage = document.createElement('span');
-    const textDiv = document.querySelector('#shortanswer-div');
+    const feedbackMessage = document.createElement('span');
+    const shortAnswerForm = document.querySelector('#shortanswer-form');
+    // Add feedback message for correct/incorrect answers
     if (correctAnswer) {    
-        correctMessage.textContent = "Correct";
-        correctMessage.setAttribute('style', 'color: #66FF99; margin-left: 1rem;');
-        textDiv.appendChild(correctMessage)
+        feedbackMessage.textContent = "Correct";
+        feedbackMessage.classList.add('text-success', 'ms-3');
+        shortAnswerForm.appendChild(feedbackMessage)
     } else {
-        correctMessage.textContent = "Incorrect";
-        correctMessage.setAttribute('style', 'color: #ffcbca;  margin-left: 1rem;');
-        textDiv.appendChild(correctMessage);
+        feedbackMessage.textContent = "Incorrect";
+        feedbackMessage.classList.add('text-danger', 'ms-3');
+        shortAnswerForm.appendChild(feedbackMessage);
+        // Create and add the correct answer element
         const validAnswerEl = document.createElement('p');
-        validAnswerEl.textContent = currentQuestion.answer; 
-        textDiv.appendChild(validAnswerEl);
+        validAnswerEl.textContent = `The correct answer is: ${currentQuestion.answer}`;
+        validAnswerEl.id = 'correct-answer';
+        validAnswerEl.classList.add('mt-2', 'text-info');
+        const shortAnswerModule = document.querySelector('#shortanswer-module');
+        shortAnswerModule.appendChild(validAnswerEl);
     }
 }
 
@@ -383,9 +396,9 @@ const clearShortAnswerMessages = function() {
     for (message of messageElements) {
         message.remove();
     }
-    const validAnswerEl = document.querySelectorAll('#shortanswer-form p');
-    for (answer of validAnswerEl) {
-        answer.remove();
+    const validAnswerEl = document.querySelector('#correct-answer');
+    if (validAnswerEl) {
+        validAnswerEl.remove();
     }
 }
 
