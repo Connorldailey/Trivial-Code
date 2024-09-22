@@ -3,9 +3,11 @@
 }
 
 :root {
-    --main-background: #cc0000;
-    --card-background: lightgray;
-    --hover-background: gray;
+    --main-background: #b30000;
+    --card-background: #1a1a1a;
+    --hover-background: #2e2e2e;
+    --text-color: #e0e0e0;
+    --accent-color: #b30000;
 }
 
 body {
@@ -13,16 +15,22 @@ body {
     flex-direction: column;
     margin: 0;
     padding: 0;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     line-height: 1.5;
+    font-family: 'Open Sans', Arial, sans-serif;
 }
 
 h1 {
     font-size: 200%;
+    color: var(--text-color);
 }
 
 h2 {
-    font-size: 150%;
+    font-size: 175%;
+    color: var(--accent-color);
+}
+
+h1, h2, #countdown-timer, #streak, .streak-label, #timer {
+    font-family: 'Creepster', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 main {
@@ -30,6 +38,10 @@ main {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    background-image: url('../images/dark-texture-background.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: var(--text-color);
 }
 
 header {
@@ -37,14 +49,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
     background-color: var(--main-background);
-}
-
-header a:hover {
-    cursor: pointer;
-    text-decoration: underline;
-    color: blue;
 }
 
 footer {
@@ -52,7 +57,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
     background-color: var(--main-background);
 }
 
@@ -68,6 +72,8 @@ footer {
     border-radius: 10px;
     padding: 1.5rem;
     background-color: var(--card-background);
+    box-shadow: 0 0 10px var(--accent-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #instructions-section ul {
@@ -85,11 +91,17 @@ footer {
 
 #gameplay-section:hover {
     background-color: var(--hover-background);
+    transform: scale(1.01);
+    cursor: pointer;
 }
 
 #instructions-section {
     flex: 1 1 auto;
     max-width: 60%;
+}
+
+#instructions-section:hover {
+    transform: scale(1.01);
 }
 
 #stats-section {
@@ -98,6 +110,10 @@ footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+#stats-section:hover {
+    transform: scale(1.01);
 }
 
 .table-container {
@@ -116,6 +132,11 @@ footer {
     border: 1px solid black;
     text-align: center;
     width: 20%;
+    background-color: var(--hover-background);
+}
+
+#stats-table th {
+    background-color: var(--accent-color);
 }
 
 #trivia-section {
@@ -136,7 +157,7 @@ footer {
 }
 
 #prompt-header {
-    display: none; /* Initially hidden until needed */
+    display: none;
     flex-direction: row;
     justify-content: space-between;
 }
@@ -174,6 +195,10 @@ footer {
 #shortanswer-module {
     display: none;
     flex-direction: column;
+}
+
+#shortanswer-input {
+    width: 400px;
 }
 
 #endgame-module {
