@@ -4,6 +4,11 @@
     ----------------------------------------------------------------
 */
 
+const returnHomeButton = document.querySelector('#return-home');
+returnHomeButton.addEventListener('click', function() {
+    window.location = './index.html';
+});
+
 // Create a temporary object to store gameplay data
 let gameplayObject = {
     username: '',
@@ -16,31 +21,44 @@ let gameplayObject = {
 // Handle username form submission
 const usernameFormEl = document.querySelector('#username-form');
 const submitUsernameForm = function(event) {
+    // Prevent page refresh on submission
     event.preventDefault();
+    // Get the value entered in the username input field
     const username = usernameFormEl.username.value;
+    // Check if the username is empty or invalid
     if (!username || username === "") {
+        // Display an error message if no username is provided
         const errorMessageEl = document.querySelector('#error-message');
         errorMessageEl.textContent = "Please enter a valid username.";
-        return;
+        return; // Exit the function
     }
+    // Retrieve the username module and hide it
     const usernameModuleEl = document.querySelector('#username-module');
     usernameModuleEl.setAttribute('style', 'display: none;');
     gameplayObject.username = username;
+    // Start the countdown after the username is submitted
     startCountdown();
 }
+// Add an event listener to the username form
 usernameFormEl.addEventListener('submit', submitUsernameForm);
 
 // Start the game countdown
 const startCountdown = function() {
+    // Set the timer to 4 seconds
     let timeLeft = 4;
+    // Select the countdown timer element from the DOM
     const countEl = document.querySelector('#countdown-timer');
+    // Set up an interval that runs every second
     const timeInterval = setInterval(function() {
+        // Count down from 3 to 1
         if (timeLeft > 1) {
             countEl.textContent = timeLeft - 1;
             timeLeft--;
+        // Display "Go!" when there is one second left until gameplay
         } else if (timeLeft === 1) {
             countEl.textContent = 'Go!';
             timeLeft--;
+        // Clear the countdown display, clear the interval, and display a question
         } else {
             countEl.textContent = '';
             clearInterval(timeInterval);
@@ -49,9 +67,11 @@ const startCountdown = function() {
     }, 1000);
 }
 
-// Define a global variable for the current question and timer
+// Define a global variable for the current question
 let currentQuestion = {};
+// Define a global variable for the questions seen
 let questionsSeen = [];
+// Define a global variable for the game timer
 let timer;
 
 // Chose a question type and call the respective operations
@@ -97,7 +117,6 @@ const newMultipleChoice = function() {
     // Hide Short Answer Module if displayed
     const shortAnswerModule = document.querySelector('#shortanswer-module');
     shortAnswerModule.setAttribute('style', 'display: none;');
-
     // Fill the form with the choices
     const multipleChoiceModule = document.querySelector('#multiplechoice-module');
     multipleChoiceModule.setAttribute('style', 'display: flex;');
@@ -186,7 +205,7 @@ const displayMultipleChoiceResults = function(correctAnswer) {
     }
 }
 
-// Display a new Short Answer question
+// Display a new short answer question
 const newShortAnswer = function() {
     // Increment the number of questions
     gameplayObject.numQuestions++;
@@ -212,8 +231,7 @@ const newShortAnswer = function() {
     const multipleChoiceModule = document.querySelector('#multiplechoice-module');
     multipleChoiceModule.setAttribute('style', 'display: none;');
     // Remove Textbox Content
-    const textBox = document.querySelector('#shortanswer-input');
-    textBox.textContent = '';
+    document.querySelector('#shortanswer-input').value = '';
     // Display Short Answer Module
     const shortAnswerModule = document.querySelector('#shortanswer-module');
     shortAnswerModule.setAttribute('style', 'display: flex;');
@@ -239,7 +257,7 @@ const newShortAnswer = function() {
         }
     }, 1000);
 }
-// Handle the Short Answer question submission
+// Handle the short answer question submission
 const shortAnswerFormEl = document.querySelector('#shortanswer-form');
 const submitShortAnswerForm = function(event) {
     event.preventDefault();
@@ -297,7 +315,7 @@ const endGame = function() {
     multipleChoiceModule.setAttribute('style', 'display: none;');
     const shortAnswerModule = document.querySelector('#shortanswer-module');
     shortAnswerModule.setAttribute('style', 'display: none;');
-    // Display the endgame section
+    // Display the endgame section content
     const endgameModuleEl = document.querySelector('#endgame-module');
     endgameModuleEl.setAttribute('style', 'display: flex;');
     const unformattedAvgTime = gameplayObject.totalTime / gameplayObject.numQuestions;
@@ -339,6 +357,7 @@ const restartGame = function(username) {
     endgameModuleEl.setAttribute('style', 'display: none;');
     startCountdown();
 }
+// Add an event listener to the replay game button
 replayButton.addEventListener('click', function() {
     restartGame(gameplayObject.username);
 });
@@ -348,6 +367,7 @@ const exitButton = document.querySelector('#exit-button');
 const redirectPage = function() {
     window.location = "index.html";
 }
+// Add an event listener to the exit game button
 exitButton.addEventListener('click', redirectPage);
 
 // Clears the feedback messages for multiple choice questions
@@ -384,7 +404,7 @@ const updateStatsInStorage = function(stat) {
     localStorage.setItem('statsObject', JSON.stringify(statsObject));
 }
 
-// Reads local storage and returns the statsObject
+// Reads from local storage and returns the statsObject
 const readStatsFromStorage = function() {
     const statsObject = localStorage.getItem('statsObject');
     if (statsObject && statsObject.length > 0) {
