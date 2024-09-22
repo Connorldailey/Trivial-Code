@@ -4,11 +4,6 @@
     ----------------------------------------------------------------
 */
 
-const returnHomeButton = document.querySelector('#return-home');
-returnHomeButton.addEventListener('click', function() {
-    window.location = './index.html';
-});
-
 // Create a temporary object to store gameplay data
 let gameplayObject = {
     username: '',
@@ -17,6 +12,19 @@ let gameplayObject = {
     totalTime: 0,
     date: new Date().toJSON().slice(0,10),
 }
+
+// Load and initialize sounds
+const sounds = {
+    background: new Audio('./assets/sounds/background.mp3'),
+    countdown: new Audio('./assets/sounds/countdown.wav'),
+    go: new Audio('./assets/sounds/go.wav'),
+    correct: new Audio('./assets/sounds/correct.wav'),
+    incorrect: new Audio('./assets/sounds/incorrect.mp3'),
+};
+// Loop the background music
+sounds.background.loop = true;
+// Set the volume of the background music
+sounds.background.volume = 0.5;
 
 // Handle username form submission
 const usernameFormEl = document.querySelector('#username-form');
@@ -44,6 +52,10 @@ usernameFormEl.addEventListener('submit', submitUsernameForm);
 
 // Start the game countdown
 const startCountdown = function() {
+    // Center the countdown in the trivia section
+    const triviaSection = document.querySelector('#trivia-section');
+    triviaSection.style.justifyContent = 'center';
+    triviaSection.style.alignItems = 'center';
     // Set the timer to 4 seconds
     let timeLeft = 4;
     // Select the countdown timer element from the DOM
@@ -54,14 +66,24 @@ const startCountdown = function() {
         if (timeLeft > 1) {
             countEl.textContent = timeLeft - 1;
             timeLeft--;
+            // Play the countdown haptic
+            sounds.countdown.play();
         // Display "Go!" when there is one second left until gameplay
         } else if (timeLeft === 1) {
             countEl.textContent = 'Go!';
             timeLeft--;
+            // Play the "Go!" haptic
+            sounds.go.play();
         // Clear the countdown display, clear the interval, and display a question
         } else {
             countEl.textContent = '';
             clearInterval(timeInterval);
+            // Reset the Flexbox styles back to default
+            triviaSection.style.justifyContent = '';
+            triviaSection.style.alignItems = '';
+            const streak = document.querySelector('#streak');
+            streak.textContent = 0;
+            sounds.background.play();
             initializeQuestion();
         }
     }, 1000);
@@ -101,8 +123,8 @@ const newMultipleChoice = function() {
     let question;
     let questionUsed = true;
     while(questionUsed) {
-        questionIndex = Math.floor(Math.random() * tempMultipleChoiceQuestions.length);
-        question = tempMultipleChoiceQuestions[questionIndex];
+        questionIndex = Math.floor(Math.random() * multipleChoiceQuestions.length);
+        question = multipleChoiceQuestions[questionIndex];
         if (!questionsSeen.includes(question)) {
             questionUsed = false;
             questionsSeen.push(question);
@@ -158,7 +180,6 @@ const submitMultipleChoiceForm = function(event) {
     const correctRadio = `#choice${currentQuestion.correctIndex + 1}-input`;
     const timerEl = document.querySelector('#timer');
     let correctAnswer = false;
-    console.log(document.querySelector(correctRadio).checked);
     if (document.querySelector(correctRadio).checked) {
         gameplayObject.score++;
         clearInterval(timer);
@@ -185,16 +206,22 @@ multipleChoiceFormEl.addEventListener('submit', submitMultipleChoiceForm);
 const displayMultipleChoiceResults = function(correctAnswer) {
     const correctMessage = document.createElement('span');
     correctMessage.textContent = "Correct";
-    correctMessage.setAttribute('style', 'color: #66FF99; margin-left: 1rem;');
+    correctMessage.setAttribute('style', 'color: #66FF99;');
+    correctMessage.classList.add('ms-3');
     const correctDiv = `#question${currentQuestion.correctIndex + 1}-div`;
     const correctDivEl = document.querySelector(correctDiv);
     correctDivEl.appendChild(correctMessage);
     if (correctAnswer) {
+        // Play correct answer haptic
+        sounds.correct.play();
         return;
+    } else {
+        // Play incorrect answer haptic
+        sounds.incorrect.play();
     }
     const incorrectMessage = document.createElement('span');
     incorrectMessage.textContent = "Incorrect";
-    incorrectMessage.setAttribute('style', 'color: #ffcbca;  margin-left: 1rem;');
+    incorrectMessage.classList.add('text-danger', 'ms-3');
     const radioButtons = document.querySelectorAll('input[name="question"]')
     for (let i = 0; i < radioButtons.length; i++) {
         if (radioButtons[i].checked) {
@@ -214,8 +241,8 @@ const newShortAnswer = function() {
     let question;
     let questionUsed = true;
     while(questionUsed) {
-        questionIndex = Math.floor(Math.random() * tempShortAnswerQuestions.length);
-        question = tempShortAnswerQuestions[questionIndex];
+        questionIndex = Math.floor(Math.random() * shortAnswerQuestions.length);
+        question = shortAnswerQuestions[questionIndex];
         if (!questionsSeen.includes(question)) {
             questionUsed = false;
             questionsSeen.push(question);
@@ -236,12 +263,12 @@ const newShortAnswer = function() {
     const shortAnswerModule = document.querySelector('#shortanswer-module');
     shortAnswerModule.setAttribute('style', 'display: flex;');
     // Handle the timer
-    let timeLeft = 20;
+    let timeLeft = 30;
     const timerEl = document.querySelector('#timer');
     timerEl.setAttribute('style', 'background-color: #66FF99;');
     timer = setInterval(function() {
         if (timeLeft != 0) {
-            if (timeLeft <= 5) {
+            if (timeLeft <= 10) {
                 timerEl.setAttribute('style', 'background-color: #ffcbca;');
             }
             timerEl.textContent = timeLeft;
@@ -290,24 +317,36 @@ shortAnswerFormEl.addEventListener('submit', submitShortAnswerForm);
 
 // Display feedback on short answer questions
 const displayShortAnswerResults = function(correctAnswer) {
-    const correctMessage = document.createElement('span');
-    const textDiv = document.querySelector('#shortanswer-div');
-    if (correctAnswer) {    
-        correctMessage.textContent = "Correct";
-        correctMessage.setAttribute('style', 'color: #66FF99; margin-left: 1rem;');
-        textDiv.appendChild(correctMessage)
+    const feedbackMessage = document.createElement('span');
+    const shortAnswerForm = document.querySelector('#shortanswer-form');
+    // Add feedback message for correct/incorrect answers
+    if (correctAnswer) {   
+        // Play correct answer haptic
+        sounds.correct.play(); 
+        feedbackMessage.textContent = "Correct";
+        feedbackMessage.setAttribute('style', 'color: #66FF99;');
+        feedbackMessage.classList.add('ms-3');
+        shortAnswerForm.appendChild(feedbackMessage);
     } else {
-        correctMessage.textContent = "Incorrect";
-        correctMessage.setAttribute('style', 'color: #ffcbca;  margin-left: 1rem;');
-        textDiv.appendChild(correctMessage);
+        // Play incorrect answer haptic
+        sounds.incorrect.play();
+        feedbackMessage.textContent = "Incorrect";
+        feedbackMessage.classList.add('text-danger', 'ms-3');
+        shortAnswerForm.appendChild(feedbackMessage);
+        // Create and add the correct answer element
         const validAnswerEl = document.createElement('p');
-        validAnswerEl.textContent = currentQuestion.answer; 
-        textDiv.appendChild(validAnswerEl);
+        validAnswerEl.textContent = `The correct answer is: ${currentQuestion.answer}`;
+        validAnswerEl.id = 'correct-answer';
+        validAnswerEl.classList.add('mt-2', 'text-info');
+        const shortAnswerModule = document.querySelector('#shortanswer-module');
+        shortAnswerModule.appendChild(validAnswerEl);
     }
 }
 
 // Dsiplay the endgame module with game stats
 const endGame = function() {
+    // Stop the background music
+    sounds.background.pause();
     // Hide any visible content
     const promptHeaderEl = document.querySelector('#prompt-header');
     promptHeaderEl.setAttribute('style', 'display: none;');
@@ -383,9 +422,9 @@ const clearShortAnswerMessages = function() {
     for (message of messageElements) {
         message.remove();
     }
-    const validAnswerEl = document.querySelectorAll('#shortanswer-form p');
-    for (answer of validAnswerEl) {
-        answer.remove();
+    const validAnswerEl = document.querySelector('#correct-answer');
+    if (validAnswerEl) {
+        validAnswerEl.remove();
     }
 }
 
@@ -414,87 +453,369 @@ const readStatsFromStorage = function() {
     }
 }
 
-// Store the temporary list of multiple choice questions
-const tempMultipleChoiceQuestions = [
+// Store the updated list of multiple-choice questions about HTML, CSS, and JavaScript
+const multipleChoiceQuestions = [
     {
-        prompt: "What is the capital of France?",
-        choices: ["Berlin", "Madrid", "Paris", "Rome"],
-        correctIndex: 2
-    },
-    {
-        prompt: "Who wrote the novel '1984'?",
-        choices: ["George Orwell", "Aldous Huxley", "J.K. Rowling", "Ernest Hemingway"],
+        prompt: "What does HTML stand for?",
+        choices: [
+            "HyperText Markup Language",
+            "Hyperlinks and Text Markup Language",
+            "Home Tool Markup Language",
+            "Hyperlinking Text Management Language"
+        ],
         correctIndex: 0
     },
     {
-        prompt: "Which planet is known as the Red Planet?",
-        choices: ["Earth", "Mars", "Jupiter", "Venus"],
-        correctIndex: 1
-    },
-    {
-        prompt: "In what year did the Titanic sink?",
-        choices: ["1912", "1905", "1923", "1898"],
+        prompt: "Which HTML element is used to define important text?",
+        choices: [
+            "<strong>",
+            "<b>",
+            "<i>",
+            "<em>"
+        ],
         correctIndex: 0
     },
     {
-        prompt: "What is the chemical symbol for gold?",
-        choices: ["Ag", "Au", "Pb", "Fe"],
-        correctIndex: 1
+        prompt: "What is the correct CSS syntax to change the background color of an element?",
+        choices: [
+            "background-color: red;",
+            "color: background red;",
+            "bgcolor: red;",
+            "background = red;"
+        ],
+        correctIndex: 0
     },
     {
-        prompt: "Who painted the Mona Lisa?",
-        choices: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Claude Monet"],
-        correctIndex: 1
+        prompt: "Which property is used to change the font size in CSS?",
+        choices: [
+            "font-style",
+            "font-weight",
+            "text-size",
+            "font-size"
+        ],
+        correctIndex: 3
     },
     {
-        prompt: "Which country is home to the kangaroo?",
-        choices: ["Canada", "South Africa", "Australia", "Brazil"],
+        prompt: "Inside which HTML element do we put the JavaScript code?",
+        choices: [
+            "<js>",
+            "<javascript>",
+            "<script>",
+            "<code>"
+        ],
         correctIndex: 2
     },
     {
-        prompt: "What is the largest mammal in the world?",
-        choices: ["Elephant", "Blue Whale", "Great White Shark", "Giraffe"],
+        prompt: "Which operator is used to assign a value to a variable in JavaScript?",
+        choices: [
+            "*",
+            "=",
+            "-",
+            "+"
+        ],
         correctIndex: 1
     },
     {
-        prompt: "How many continents are there on Earth?",
-        choices: ["8", "6", "7", "4"],
+        prompt: "How do you write a comment in CSS?",
+        choices: [
+            "// This is a comment",
+            "/* This is a comment */",
+            "# This is a comment",
+            "<!-- This is a comment -->"
+        ],
+        correctIndex: 1
+    },
+    {
+        prompt: "Which method is used to add an element at the end of an array in JavaScript?",
+        choices: [
+            "push()",
+            "pop()",
+            "shift()",
+            "unshift()"
+        ],
+        correctIndex: 0
+    },
+    {
+        prompt: "Which CSS property controls the text size?",
+        choices: [
+            "font-style",
+            "text-size",
+            "font-size",
+            "text-transform"
+        ],
         correctIndex: 2
     },
     {
-        prompt: "What is the longest river in the world?",
-        choices: ["Amazon", "Nile", "Yangtze", "Mississippi"],
+        prompt: "What is the correct way to link an external JavaScript file?",
+        choices: [
+            "<script href='script.js'></script>",
+            "<script name='script.js'></script>",
+            "<script src='script.js'></script>",
+            "<script file='script.js'></script>"
+        ],
+        correctIndex: 2
+    },
+    {
+        prompt: "Which CSS property is used to change the text color of an element?",
+        choices: ["font-style", "text-decoration", "color", "font-weight"],
+        correctIndex: 2
+    },
+    {
+        prompt: "How do you call a function named 'myFunction' in JavaScript?",
+        choices: ["call myFunction()", "myFunction()", "func myFunction()", "call function myFunction()"],
+        correctIndex: 1
+    },
+    {
+        prompt: "Which of the following is the correct way to write a JavaScript array?",
+        choices: [
+            "var colors = (1:'red', 2:'green', 3:'blue')",
+            "var colors = ['red', 'green', 'blue']",
+            "var colors = 'red', 'green', 'blue'",
+            "var colors = {'red', 'green', 'blue'}"
+        ],
+        correctIndex: 1
+    },
+    {
+        prompt: "What does CSS stand for?",
+        choices: [
+            "Creative Style Sheets",
+            "Computer Style Sheets",
+            "Cascading Style Sheets",
+            "Colorful Style Sheets"
+        ],
+        correctIndex: 2
+    },
+    {
+        prompt: "Which HTML attribute is used to define inline styles?",
+        choices: ["class", "font", "styles", "style"],
+        correctIndex: 3
+    },
+    {
+        prompt: "Which JavaScript event occurs when the user clicks on an HTML element?",
+        choices: ["onmouseclick", "onchange", "onclick", "onmouseover"],
+        correctIndex: 2
+    },
+    {
+        prompt: "In CSS, how do you select an element with the id 'demo'?",
+        choices: ["#demo", ".demo", "*demo", "demo"],
+        correctIndex: 0
+    },
+    {
+        prompt: "Which property is used to change the left margin of an element in CSS?",
+        choices: ["padding-left", "margin-left", "indent", "left-margin"],
+        correctIndex: 1
+    },
+    {
+        prompt: "How do you add a comment in JavaScript?",
+        choices: [
+            "<!-- This is a comment -->",
+            "// This is a comment",
+            "' This is a comment",
+            "** This is a comment **"
+        ],
+        correctIndex: 1
+    },
+    {
+        prompt: "Which HTML element is used for specifying a header for a document or section?",
+        choices: ["<head>", "<header>", "<h1>", "<section>"],
+        correctIndex: 1
+    },
+    {
+        prompt: "In CSS, which of the following values cannot be used with the 'position' property?",
+        choices: ["static", "relative", "fixed", "middle"],
+        correctIndex: 3
+    },
+    {
+        prompt: "What is the correct JavaScript syntax to write 'Hello World' in an alert box?",
+        choices: [
+            "alert('Hello World');",
+            "msg('Hello World');",
+            "alertBox('Hello World');",
+            "msgBox('Hello World');"
+        ],
+        correctIndex: 0
+    },
+    {
+        prompt: "Which CSS property is used to change the font of an element?",
+        choices: ["font-family", "font-style", "font-weight", "font-size"],
+        correctIndex: 0
+    },
+    {
+        prompt: "How do you create a function in JavaScript?",
+        choices: [
+            "function:myFunction()",
+            "function myFunction()",
+            "function = myFunction()",
+            "create function myFunction()"
+        ],
+        correctIndex: 1
+    },
+    {
+        prompt: "Which HTML attribute specifies an alternate text for an image, if the image cannot be displayed?",
+        choices: ["alt", "src", "title", "longdesc"],
+        correctIndex: 0
+    },
+    {
+        prompt: "In JavaScript, how do you declare a variable?",
+        choices: [
+            "var myVariable;",
+            "variable myVariable;",
+            "v myVariable;",
+            "declare myVariable;"
+        ],
+        correctIndex: 0
+    },
+    {
+        prompt: "Which CSS property is used to control the spacing between lines of text?",
+        choices: ["line-height", "letter-spacing", "text-spacing", "spacing"],
+        correctIndex: 0
+    },
+    {
+        prompt: "How do you add a background color for all `<h1>` elements in CSS?",
+        choices: [
+            "h1 {background-color: blue;}",
+            "h1.all {background-color: blue;}",
+            "all.h1 {background-color: blue;}",
+            "h1:all {background-color: blue;}"
+        ],
+        correctIndex: 0
+    },
+    {
+        prompt: "What does DOM stand for in web development?",
+        choices: [
+            "Document Object Model",
+            "Data Object Model",
+            "Document Oriented Model",
+            "Display Object Management"
+        ],
+        correctIndex: 0
+    },
+    {
+        prompt: "Which JavaScript keyword is used to define a block of code that will execute regardless of the try and catch result?",
+        choices: ["catch", "finally", "error", "default"],
         correctIndex: 1
     }
 ];
 
-const tempShortAnswerQuestions = [
+const shortAnswerQuestions = [
     {
-        prompt: "Which CSS property is used to define a flex container?",
-        answer: "display: flex;"
+        prompt: "What does HTML stand for? (Answer with three words)",
+        answer: "HyperText Markup Language"
     },
     {
-        prompt: "Which CSS property defines the direction of flex items?",
-        answer: "flex-direction"
+        prompt: "Which HTML tag is used to create a hyperlink?",
+        answer: "<a>"
     },
     {
-        prompt: "How do you change the alignment of items along the main axis?",
-        answer: "justify-content"
+        prompt: "What attribute specifies the URL in an anchor tag?",
+        answer: "href"
     },
     {
-        prompt: "Which CSS property aligns items along the cross axis?",
-        answer: "align-items"
+        prompt: "How do you insert a comment in HTML? (Start and end tags)",
+        answer: "<!-- -->"
     },
     {
-        prompt: "How do you make a flex item grow to fill the available space?",
-        answer: "flex-grow"
+        prompt: "What does CSS stand for? (Answer with three words)",
+        answer: "Cascading Style Sheets"
     },
     {
-        prompt: "Which value of 'justify-content' spaces items evenly with equal space around them?",
-        answer: "space-around"
+        prompt: "Which CSS property changes the text color?",
+        answer: "color"
     },
     {
-        prompt: "How do you make flex items wrap onto multiple lines?",
-        answer: "flex-wrap: wrap;"
+        prompt: "How do you select an element with id 'main' in CSS? (Use the correct selector)",
+        answer: "#main"
+    },
+    {
+        prompt: "How do you select elements with class 'container' in CSS? (Use the correct selector)",
+        answer: ".container"
+    },
+    {
+        prompt: "Which CSS property is used to change the background color?",
+        answer: "background-color"
+    },
+    {
+        prompt: "What is the correct HTML tag for inserting a line break?",
+        answer: "<br>"
+    },
+    {
+        prompt: "Name one keyword used to declare a variable whose value can change in JavaScript.",
+        answer: "let"
+    },
+    {
+        prompt: "Which operator assigns a value to a variable in JavaScript? (Single character)",
+        answer: "="
+    },
+    {
+        prompt: "How do you display 'Hello World' in an alert box in JavaScript? (Use alert function syntax)",
+        answer: "alert('Hello World');"
+    },
+    {
+        prompt: "Which HTML tag defines an unordered list?",
+        answer: "<ul>"
+    },
+    {
+        prompt: "Which HTML tag defines a table header cell?",
+        answer: "<th>"
+    },
+    {
+        prompt: "Which CSS property controls the size of text?",
+        answer: "font-size"
+    },
+    {
+        prompt: "How do you create a function named 'myFunction' in JavaScript? (Use function declaration syntax)",
+        answer: "function myFunction() {}"
+    },
+    {
+        prompt: "Which attribute provides alternate text for an image in HTML?",
+        answer: "alt"
+    },
+    {
+        prompt: "Which JavaScript array method removes the last element? (Method name with parentheses)",
+        answer: "pop()"
+    },
+    {
+        prompt: "How do you add a comment in CSS? (Start and end symbols)",
+        answer: "/* */"
+    },
+    {
+        prompt: "Which keyword declares a constant variable in JavaScript? (One word)",
+        answer: "const"
+    },
+    {
+        prompt: "Which HTML attribute makes an input field mandatory? (One word)",
+        answer: "required"
+    },
+    {
+        prompt: "Which JavaScript method converts an array to a string? (Method name with parentheses)",
+        answer: "join()"
+    },
+    {
+        prompt: "What is the correct HTML tag to create a numbered list? (Use angle brackets)",
+        answer: "<ol>"
+    },
+    {
+        prompt: "Which CSS property is used to make text bold? (Two words, hyphenated)",
+        answer: "font-weight"
+    },
+    {
+        prompt: "How do you write 'Hello World' to the console in JavaScript?",
+        answer: "console.log('Hello World');"
+    },
+    {
+        prompt: "Which HTML attribute specifies the language of the document?",
+        answer: "lang"
+    },
+    {
+        prompt: "Which CSS property adds space inside an element's border? (One word)",
+        answer: "padding"
+    },
+    {
+        prompt: "How do you reference an external CSS file named 'styles.css' in HTML? (Use full link tag with href attribute)",
+        answer: "<link rel='stylesheet' href='styles.css'>"
+    },
+    {
+        prompt: "Which JavaScript keyword is used to skip to the next iteration of a loop?",
+        answer: "continue"
     }
 ];

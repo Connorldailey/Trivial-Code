@@ -29,6 +29,7 @@ const readStatsFromStorage = function() {
 
 // Renders the stats table section on the landing page
 const renderStatsTable = function(statsObject) {
+    // localStorage.clear();
     // Reference the stats-table div
     const statsTableEl = document.querySelector('#stats-table');
     // Clear the content of the stats-table
@@ -85,8 +86,6 @@ const renderStatsTable = function(statsObject) {
         // Append the row to the table
         statsTableEl.appendChild(tableRowEl);
     }
-    // Add a border to the stats table element
-    statsTableEl.setAttribute('style', 'border: 1px solid black;');
 }
 
 renderStatsTable(readStatsFromStorage());

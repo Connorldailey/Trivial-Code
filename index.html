@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Trivial Code</title>
         <link rel="stylesheet" href="./assets/css/reset.css" />
+        <!-- Bootstrap CSS CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">  
+        <!-- Google Creepster Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet"> 
         <link rel="stylesheet" href="./assets/css/style.css" />
     </head>
     <body>
@@ -26,23 +30,50 @@
                 <section class="page-section" id="instructions-section">
                     <h2>How to play:</h2>
                     <ul>
-                        <li>List item 1</li>
-                        <li>List item 2</li>
-                        <li>List item 3</li>
+                        <li>
+                            The game begins when you hit play. 
+                            Once you start, there's no turning back.
+                        </li>
+                        <li>
+                            Make sure to enter your name. This is how you'll be remembered... 
+                            unless, of course, you fail. Then no one will remember you at all.
+                        </li>
+                        <li>
+                            Once your username is entered, the clock starts ticking. 
+                            You’ll get a 3-second countdown. 
+                            Use that time wisely to prepare... because there’s no escaping what comes next.
+                        </li>
+                        <li>
+                            Correct answers will keep you safe... for now. But a wrong answer? 
+                            Well, let’s just say, your game will end in gruesome defeat, 
+                            and there’s no second chances once you fail.
+                        </li>
+                        <li>
+                            When (or if) you survive, you'll see your game stats. 
+                            Will you be remembered as a champion or just another name lost to the leaderboard? 
+                            Your choice: Play again and tempt fate once more, or return to view the leaderboard 
+                            and see where you stand among the fallen.
+                        </li>
+                        <li>
+                            Have fun playing, but remember: In this game, mistakes aren’t just mistakes. 
+                            They’re your undoing. Choose wisely, and happy coding... for now.
+                        </li>
                     </ul>
                 </section>
             </div>
             <!-- Create the stats table section -->
             <section class="page-section" id="stats-section">
                 <h2>Leaderboard</h2>
-                <div id="stats-table">
-                    <!-- dynamically add the stats table here -->
+                <div id="table-container">
+                    <table id="stats-table">
+                        <!-- dynamically add the stats table here -->
+                    </table>
                 </div>
             </section>
         </main>
         <!-- Add the page footer -->
         <footer>
-            <h2>Created by the JigsawJSONs</h2>
+            <h1>Created by the JigsawJSONs</h1>
         </footer>
         <script src="./assets/js/logic.js"></script>
     </body>

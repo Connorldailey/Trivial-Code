@@ -5,63 +5,66 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Trivial Code</title>
         <link rel="stylesheet" href="./assets/css/reset.css" />
+        <!-- Bootstrap CSS CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">  
+        <!-- Google Creepster Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet"> 
         <link rel="stylesheet" href="./assets/css/style.css" />
     </head>
     <body>
         <!-- Add the page header -->
         <header>
             <h1>Trivial Code</h1>
-            <a id="return-home">Return Home</a>
         </header>
         <!-- Add the main section to hold the page content -->
         <main>
             <section class="page-section" id="trivia-section"> 
             <!--User Name--> 
                 <div id="username-module">
-                    <h2>Enter Username</h2>
-                    <form id="username-form">
-                        <input type="text" id="username" name="username">
-                        <input type="submit" value="Submit">
-                        <p id="error-message"></p>
+                    <h2>Enter your username:</h2>
+                    <form id="username-form" class="d-flex">
+                        <input type="text" class="form-control" id="username" name="username">
+                        <input type="submit" value="Submit" class="btn btn-primary ms-2">
                     </form>
+                    <p id="error-message" class="text-danger mt-2"></p>
                 </div>
                 <div id="countdown-module"> 
                     <p id="countdown-timer"></p>  
                 </div>
-                <div id="prompt-header">
-                    <h2 id="prompt"></h2>
-                    <div>
-                        <p>Streak: <span id="streak"></span></p>
-                        <p id="timer"></p>
-                    </div>   
+                <div id="prompt-header" class="mb-3">
+                    <h2 id="prompt" class="me-3 mb-0"></h2>
+                    <div class="d-flex align-items-center">
+                        <p class="streak-label mb-0 me-4">Streak: <span id="streak"></span></p>
+                        <p id="timer" class="mb-0"></p>
+                    </div>
                 </div>
                 <div id="multiplechoice-module">
                     <form id="multiplechoice-form">
-                        <div id="question1-div">
-                            <input type="radio" id="choice1-input" name="question">
-                            <label for="choice1-input" id="choice1-label"></label>
+                        <div id="question1-div" class="form-check">
+                            <input type="radio" class="form-check-input" id="choice1-input" name="question">
+                            <label class="form-check-label" for="choice1-input" id="choice1-label"></label>
                         </div>
-                        <div id="question2-div">
-                            <input type="radio" id="choice2-input" name="question">
-                            <label for="choice2-input" id="choice2-label"></label>
+                        <div id="question2-div" class="form-check">
+                            <input type="radio" class="form-check-input" id="choice2-input" name="question">
+                            <label class="form-check-label" for="choice2-input" id="choice2-label"></label>
                         </div>
-                        <div id="question3-div">
-                            <input type="radio" id="choice3-input" name="question">
-                            <label for="choice3-input" id="choice3-label"></label>
+                        <div id="question3-div" class="form-check">
+                            <input type="radio" class="form-check-input" id="choice3-input" name="question">
+                            <label class="form-check-label" for="choice3-input" id="choice3-label"></label>
                         </div>
-                        <div id="question4-div">
-                            <input type="radio" id="choice4-input" name="question">
-                            <label for="choice4-input" id="choice4-label"></label>
+                        <div id="question4-div" class="form-check">
+                            <input type="radio" class="form-check-input" id="choice4-input" name="question">
+                            <label class="form-check-label" for="choice4-input" id="choice4-label"></label>
                         </div>
-                        <input type="submit" value="Submit">
+                        <input type="submit" value="Submit" class="btn btn-primary mt-3">
                     </form>
                 </div>
-                <div id="shortanswer-module" >
-                    <form id="shortanswer-form">
+                <div id="shortanswer-module">
+                    <form id="shortanswer-form" class="d-flex align-items-center">
                         <div id="shortanswer-div"> 
-                            <input type="text" name="shortanswer-textbox" id="shortanswer-input"> 
+                            <input type="text" class="form-control" name="shortanswer-textbox" id="shortanswer-input"> 
                         </div>
-                        <input type="submit" value="Submit">
+                        <input type="submit" value="Submit" class="btn btn-primary ms-2">
                     </form>
                 </div>
                 <div id="endgame-module">
@@ -73,15 +76,15 @@
                         <li>Date: <span id="date"></span></li>
                     </ul>
                     <div>
-                        <button id="replay-button">Play Again</button>
-                        <button id="exit-button">Home</button>
+                        <button id="replay-button" class="btn btn-primary m-1">Play Again</button>
+                        <button id="exit-button" class="btn btn-primary m-1">Return Home</button>
                     </div>
                 </div>
             </section>  
         </main>
         <!-- Add the page footer -->
         <footer>
-            <h2>Created by the JigsawJSONs</h2>
+            <h1>Created by the JigsawJSONs</h1>
         </footer>
         <script src="./assets/js/trivia.js"></script>
     </body>
