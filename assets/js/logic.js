@@ -35,9 +35,10 @@ const renderStatsTable = function(statsObject) {
     // Clear the content of the stats-table
     statsTableEl.innerHTML = "";
     // Check if there are any stats in local storage
-    if (!statsObject) {
+    if (!statsObject || statsObject.length === 0) {
         const emptyTableMessage = document.createElement('p');
         emptyTableMessage.textContent = "Nothing to display yet. Play to place.";
+        emptyTableMessage.setAttribute('style', 'text-align: center;')
         statsTableEl.appendChild(emptyTableMessage);
         return;
     } 
@@ -66,25 +67,27 @@ const renderStatsTable = function(statsObject) {
 
     // Append the top ten records to the table body
     for (let i = 0; i < 10; i++) {
-        // Construct each table row
-        const tableRowEl = document.createElement('tr');
-        const positionEl = document.createElement('td');
-        positionEl.textContent = i + 1;
-        tableRowEl.appendChild(positionEl);
-        const usernameEl = document.createElement('td');
-        usernameEl.textContent = statsObject[i].username;
-        tableRowEl.appendChild(usernameEl);
-        const scoreEl = document.createElement('td');
-        scoreEl.textContent = statsObject[i].score;
-        tableRowEl.appendChild(scoreEl);
-        const timeEl = document.createElement('td');
-        timeEl.textContent = statsObject[i].avgTime;
-        tableRowEl.appendChild(timeEl);
-        const dateEl = document.createElement('td');
-        dateEl.textContent = statsObject[i].date;
-        tableRowEl.appendChild(dateEl);
-        // Append the row to the table
-        statsTableEl.appendChild(tableRowEl);
+        if (statsObject[i]) {
+            // Construct each table row
+            const tableRowEl = document.createElement('tr');
+            const positionEl = document.createElement('td');
+            positionEl.textContent = i + 1;
+            tableRowEl.appendChild(positionEl);
+            const usernameEl = document.createElement('td');
+            usernameEl.textContent = statsObject[i].username;
+            tableRowEl.appendChild(usernameEl);
+            const scoreEl = document.createElement('td');
+            scoreEl.textContent = statsObject[i].score;
+            tableRowEl.appendChild(scoreEl);
+            const timeEl = document.createElement('td');
+            timeEl.textContent = statsObject[i].avgTime;
+            tableRowEl.appendChild(timeEl);
+            const dateEl = document.createElement('td');
+            dateEl.textContent = statsObject[i].date;
+            tableRowEl.appendChild(dateEl);
+            // Append the row to the table
+            statsTableEl.appendChild(tableRowEl);
+        }
     }
 }
 
